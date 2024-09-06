@@ -1,13 +1,11 @@
-# :bulb: IAPTracking
+# 🐾 IAPTracking
 
-> 문제점
-> 
+> ❗️ 문제점
 > 사용자가 인 앱 결제를 통해 결제 후 보상이 제대로 이루어 지지 않은 경우 실 결제 한 항목인지 확인 할 수 있는 로직이 필요 했다.
 > AppStoreConnect의 ‘판매 및 추세’에서 판매량 & 수익 & 매출 만 보여줄 뿐, 애플 측에 환불을 받았는지 상세한 내용을 알 수가 없어 
 > 따로 연락을 취해 문제를 해결해야 했다.
 
-> 해결 방안
-> 
+> ✨ 해결 방안
 > App Store Server API 를 통해 주문 번호 or Transaction ID 값으로 주문 내역, 환불 내역을 조회 할 수 있다. 
 
 ## 1. AppStoreServerAPIClient 조회
