@@ -7,15 +7,29 @@
 
 import Foundation
 
+enum RevocationReason: Int {
+    case Accidental = 0
+    case AppIssue   = 1
+    
+    var reason: String {
+        switch self {
+        case .Accidental: return "단순 변심"
+        case .AppIssue: return "앱 동작 이슈"
+        }
+    }
+}
+
 public struct OrderLookUpModel: Equatable, Codable, Identifiable {
     public let id = UUID()
     
+    //Data 타입 수정필요
     var originalTransactionId: String = "" //ID
     var transactionReason: String     = ""
     var environment: String           = ""
     var signedDate: TimeInterval     = 0
     var currency: String              = ""
     var originalPurchaseDate: TimeInterval    = 0
+    var revocationDate: TimeInterval = 0
     var quantity: Int                 = 0
     var transactionId: String         = ""
     var bundleId: String              = ""
@@ -26,9 +40,23 @@ public struct OrderLookUpModel: Equatable, Codable, Identifiable {
     var purchaseDate: TimeInterval    = 0  //구매 날짜
     var type: String                  = ""
     var productId: String             = ""  //상품 ID
+    var revocationReason: Int        = 0   //환불 사유
+    
+    var revokeReason: RevocationReason? {
+        return RevocationReason(rawValue: revocationReason)
+    }
     
     var dateFormat: String {
         let date = Date(timeIntervalSince1970: purchaseDate / 1000)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeStyle = DateFormatter.Style.medium //Set time style
+        dateFormatter.dateStyle = DateFormatter.Style.medium //Set date style
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: date as Date)
+    }
+    
+    var revokeDate: String {
+        let date = Date(timeIntervalSince1970: revocationDate / 1000)
         let dateFormatter = DateFormatter()
         dateFormatter.timeStyle = DateFormatter.Style.medium //Set time style
         dateFormatter.dateStyle = DateFormatter.Style.medium //Set date style
@@ -47,6 +75,7 @@ public struct OrderLookUpModel: Equatable, Codable, Identifiable {
         case signedDate
         case currency
         case originalPurchaseDate
+        case revocationDate
         case quantity
         case transactionId
         case bundleId
@@ -67,6 +96,7 @@ public struct OrderLookUpModel: Equatable, Codable, Identifiable {
         signedDate            = (try? container.decode(TimeInterval.self, forKey: .signedDate)) ?? 0
         currency              = (try? container.decode(String.self, forKey: .currency)) ?? ""
         originalPurchaseDate  = (try? container.decode(TimeInterval.self, forKey: .originalPurchaseDate)) ?? 0
+        revocationDate        = (try? container.decode(TimeInterval.self, forKey: .revocationDate)) ?? 0
         quantity              = (try? container.decode(Int.self, forKey: .quantity)) ?? 0
         transactionId         = (try? container.decode(String.self, forKey: .transactionId)) ?? ""
         bundleId              = (try? container.decode(String.self, forKey: .bundleId)) ?? ""

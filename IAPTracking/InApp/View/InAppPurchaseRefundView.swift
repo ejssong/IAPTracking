@@ -29,12 +29,16 @@ struct InAppPurchaseRefundView: View {
                     Text(model.productId)
                 }
                 
-                TableColumn("구매 날짜") { model in
-                    Text(String(model.dateFormat))
+                TableColumn("환불 날짜") { model in
+                    Text(String(model.revokeDate))
                 }
                 
                 TableColumn("금액") { model in
                     Text("\(model.originalPrice)")
+                }
+                
+                TableColumn("환불 사유") { model in
+                    Text(String(model.revokeReason?.reason ?? ""))
                 }
                 
             } rows: {
